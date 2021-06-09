@@ -14,7 +14,8 @@ const findUser = async (name) => {
 const createUser = async (name, email) => {
     return connection()
         .then((db) => db.collection('users').insertOne({name, email}))
-        .then((result) => result.ops[0]);
+        .then((result) => result.ops[0])
+        .catch(err => err);
 }
 
 const deleteUser = async (id) => {

@@ -11,6 +11,11 @@ app.get('/users', users.getAll);
 app.post('/users', users.createUser);
 app.delete('/users/:id', users.deleteUser);
 app.put('/users/:id', users.editUser);
+app.get('/users/sort', users.sortUser)
+
+app.use((error, req, res, next) => {
+    res.send(error);
+})
 
 const PORT = 3001;
 

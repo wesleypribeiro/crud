@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import { getAll, createUser, deleteUser, editUser } from "./services/users";
+import { getAll, createUser, deleteUser, editUser, sortPairs } from "./services/users";
 
 function App() {
   const [id, setId] = useState("");
@@ -8,6 +8,7 @@ function App() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [editing, setEditing] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     getAll(setUser);
@@ -23,8 +24,9 @@ function App() {
     <main>
       <div className="newUser">
         <h1>Cadastro de novo usuario</h1>
+        <span className="alert">{errorMessage}</span>
         <label>
-          Nome: 
+          Nome:
           <input
             type="text"
             value={name}
@@ -32,7 +34,7 @@ function App() {
           />
         </label>
         <label>
-          E-mail: 
+          E-mail:
           <input
             type="email"
             value={email}
@@ -48,7 +50,13 @@ function App() {
                     setEditing(false);
                     clearValues();
                   })
-                : createUser(name, email).then(({ data: { _id } }) => {
+                : createUser(name, email).then(({ data }) => {
+                    if (data.error) {
+                      setErrorMessage(data.error);
+                      setInterval(() => setErrorMessage(''), 1000)
+                      return;
+                    }
+                    const { _id } = data;
                     setUser([...userList, { _id, name, email }]);
                     clearValues();
                   });
@@ -109,6 +117,7 @@ function App() {
           })}
         </tbody>
       </table>
+      <button onClick={sortPairs}>Sortear!</button>
     </main>
   );
 }

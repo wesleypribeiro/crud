@@ -55,3 +55,7 @@ button:hover {
 input {
   margin-left: 0.625rem;
 }
+
+.alert {
+  color: red;
+}
